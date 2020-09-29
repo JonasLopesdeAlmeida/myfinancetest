@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Card from '../../components/card'
-import FormGroup from '../../components/form-group'
+import FormGroup from '../../components/formgroup'
 import SelectMenu from '../../components/selectMenu'
 
 import { withRouter } from 'react-router-dom'
@@ -39,7 +39,7 @@ class CadastroLancamentos extends React.Component {
                     this.setState( {...response.data, atualizando: true} )
                 })
                 .catch(erros => {
-                    messages.mensagemErro(erros.response.data)
+                    messages.MensagemErro(erros.response.data)
                 })
         }
     }
@@ -54,7 +54,7 @@ class CadastroLancamentos extends React.Component {
             this.service.validar(lancamento)
         }catch(erro){
             const mensagens = erro.mensagens;
-            mensagens.forEach(msg => messages.mensagemErro(msg));
+            mensagens.forEach(msg => messages.MensagemErro(msg));
             return false;
         }     
 
@@ -62,9 +62,9 @@ class CadastroLancamentos extends React.Component {
             .salvar(lancamento)
             .then(response => {
                 this.props.history.push('/consulta-lancamentos')
-                messages.mensagemSucesso('Lançamento cadastrado com sucesso!')
+                messages.MensagemSucesso('the release was successfully registered!')
             }).catch(error => {
-                messages.mensagemErro(error.response.data)
+                messages.MensagemErro(error.response.data)
             })
     }
 
@@ -77,9 +77,9 @@ class CadastroLancamentos extends React.Component {
             .atualizar(lancamento)
             .then(response => {
                 this.props.history.push('/consulta-lancamentos')
-                messages.mensagemSucesso('Lançamento atualizado com sucesso!')
+                messages.MensagemSucesso('the release was successfully updated!')
             }).catch(error => {
-                messages.mensagemErro(error.response.data)
+                messages.MensagemErro(error.response.data)
             })
     }
 
@@ -90,102 +90,108 @@ class CadastroLancamentos extends React.Component {
         this.setState({ [name] : value })
     }
 
+    CancelarCadastro = () => {
+
+        this.props.history.push('/consulta-lancamentos')
+    }
     render(){
         const tipos = this.service.obterListaTipos();
         const meses = this.service.obterListaMeses();
 
         return (
-            <Card title={ this.state.atualizando ? 'Atualização de Lançamento'  : 'Cadastro de Lançamento' }>
-                <div className="row">
-                    <div className="col-md-12">
-                        <FormGroup id="inputDescricao" label="Descrição: *" >
-                            <input id="inputDescricao" type="text" 
-                                   className="form-control" 
-                                   name="descricao"
-                                   value={this.state.descricao}
-                                   onChange={this.handleChange}  />
-                        </FormGroup>
-                    </div>
+            <Card title={this.state.atualizando ? 'Update release' : 'Register release'}>
+            <div className="row">
+                <div className="col-md-12">
+                    <FormGroup id="inputDescricao" label="Description: *">
+                        <input type="text"
+                            className="form-control"
+                            id="inputDescricao"
+                            name="descricao"
+                            value={this.state.descricao}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
                 </div>
-                <div className="row">
-                    <div className="col-md-6">
-                        <FormGroup id="inputAno" label="Ano: *">
-                            <input id="inputAno" 
-                                   type="text"
-                                   name="ano"
-                                   value={this.state.ano}
-                                   onChange={this.handleChange} 
-                                   className="form-control" />
-                        </FormGroup>
-                    </div>
-                    <div className="col-md-6">
-                        <FormGroup id="inputMes" label="Mês: *">
-                            <SelectMenu id="inputMes" 
-                                        value={this.state.mes}
-                                        onChange={this.handleChange}
-                                        lista={meses} 
-                                        name="mes"
-                                        className="form-control" />
-                        </FormGroup>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-4">
-                         <FormGroup id="inputValor" label="Valor: *">
-                            <input id="inputValor" 
-                                   type="text"
-                                   name="valor"
-                                   value={this.state.valor}
-                                   onChange={this.handleChange} 
-                                   className="form-control" />
-                        </FormGroup>
-                    </div>
+            </div>
+            <div className="row">
+                <div className="col-md-6">
+                    <FormGroup id="inputAno" label="Year: *">
+                        <input type="text"
+                            id="inputAno"
+                            className="form-control"
+                            name="ano"
+                            value={this.state.ano}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
 
-                    <div className="col-md-4">
-                         <FormGroup id="inputTipo" label="Tipo: *">
-                            <SelectMenu id="inputTipo" 
-                                        lista={tipos} 
-                                        name="tipo"
-                                        value={this.state.tipo}
-                                        onChange={this.handleChange}
-                                        className="form-control" />
-                        </FormGroup>
-                    </div>
-
-                    <div className="col-md-4">
-                         <FormGroup id="inputStatus" label="Status: ">
-                            <input type="text" 
-                                   className="form-control" 
-                                   name="status"
-                                   value={this.state.status}
-                                   disabled />
-                        </FormGroup>
-                    </div>
-
-                   
                 </div>
-                <div className="row">
-                     <div className="col-md-6" >
-                        { this.state.atualizando ? 
-                            (
-                                <button onClick={this.atualizar} 
-                                        className="btn btn-success">
-                                        <i className="pi pi-refresh"></i> Atualizar
-                                </button>
-                            ) : (
-                                <button onClick={this.submit} 
-                                        className="btn btn-success">
-                                        <i className="pi pi-save"></i> Salvar
-                                </button>
-                            )
-                        }
-                        <button onClick={e => this.props.history.push('/consulta-lancamentos')} 
-                                className="btn btn-danger">
-                                <i className="pi pi-times"></i>Cancelar
-                        </button>
-                    </div>
+                <div className="col-md-6">
+                    <FormGroup id="inputMes" label="Month: *">
+                        <SelectMenu id="inputTipo" className="form-control" lista={meses}
+                            name="mes"
+                            value={this.state.mes}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
                 </div>
-            </Card>
+            </div>
+            <div className="row">
+                <div className="col-md-4">
+                    <FormGroup id="inputValor" label="Value: *">
+                        <input type="text"
+                            id="inputValor"
+                            className="form-control"
+                            name="valor"
+                            value={this.state.valor}
+                            onChange={this.handleChange}
+                        />
+                    </FormGroup>
+                </div>
+
+                <div className="col-md-4">
+                    <FormGroup id="inputTipo" label="Release type: *">
+                        <SelectMenu id="inputTipo" className="form-control" lista={tipos}
+                            name="tipo"
+                            value={this.state.tipo}
+                            onChange={this.handleChange}
+                        />
+
+
+                    </FormGroup>
+                </div>
+                <div className="col-md-4">
+                    <FormGroup id="inputStatus" label="State: ">
+                        <input type="text"
+                            className="form-control"
+                            name="status"
+                            value={this.state.status}
+                            onChange={this.handleChange}
+                            disabled />
+
+                    </FormGroup>
+                </div>
+
+            </div>
+            {
+                this.state.atualizando ?
+                    (
+                        <button onClick={this.atualizar} className="btn btn-success">
+                            <i className="pi pi-refresh "></i>
+                             Update</button>
+                    ) : (
+                    
+                        <button onClick={this.submit} className="btn btn-success">
+                            <i className="pi pi-save "></i>
+                             Save</button>
+                    )
+            }
+
+            <button onClick={this.CancelarCadastro} className="btn btn-danger">
+            <i className="pi pi-times "></i>
+                 Cancel</button>
+
+        </Card>
         )
     }
 }

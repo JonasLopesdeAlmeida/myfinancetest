@@ -2,7 +2,7 @@ import React from 'react'
 import { withRouter } from 'react-router-dom'
 
 import Card from '../../components/card'
-import FormGroup from '../../components/form-group'
+import FormGroup from '../../components/formgroup'
 import SelectMenu from '../../components/selectMenu'
 import LancamentosTable from './lancamentosTable'
 import LancamentoService from '../../app/service/lancamentoService'
@@ -34,7 +34,7 @@ class ConsultaLancamentos extends React.Component {
 
     buscar = () => {
         if(!this.state.ano){
-            messages.mensagemErro('O preenchimento do campo Ano é obrigatório.')
+            messages.MensagemErro('The year field must be filled.')
             return false;
         }
 
@@ -54,7 +54,7 @@ class ConsultaLancamentos extends React.Component {
                 const lista = resposta.data;
                 
                 if(lista.length < 1){
-                    messages.mensagemAlert("Nenhum resultado encontrado.");
+                    messages.MensagemAlerta("No results were found.");
                 }
                 this.setState({ lancamentos: lista })
             }).catch( error => {
@@ -82,13 +82,13 @@ class ConsultaLancamentos extends React.Component {
                 const index = lancamentos.indexOf(this.state.lancamentoDeletar)
                 lancamentos.splice(index, 1);
                 this.setState( { lancamentos: lancamentos, showConfirmDialog: false } )
-                messages.mensagemSucesso('Lançamento deletado com sucesso!')
+                messages.MensagemSucesso('The release was successfully deleted!')
             }).catch(error => {
-                messages.mensagemErro('Ocorreu um erro ao tentar deletar o Lançamento')
+                messages.MensagemErro('The release cannot be deleted!')
             })
     }
 
-    preparaFormularioCadastro = () => {
+    CadastrarLancamento = () => {
         this.props.history.push('/cadastro-lancamentos')
     }
 
@@ -103,7 +103,7 @@ class ConsultaLancamentos extends React.Component {
                     lancamentos[index] = lancamento
                     this.setState({lancamento});
                 }
-                messages.mensagemSucesso("Status atualizado com sucesso!")
+                messages.MensagemSucesso("The state was successfully updated!")
             })
     }
 
@@ -120,81 +120,79 @@ class ConsultaLancamentos extends React.Component {
         );
 
         return (
-            <Card title="Consulta Lançamentos">
-                <div className="row">
-                    <div className="col-md-6">
-                        <div className="bs-component">
-                            <FormGroup htmlFor="inputAno" label="Ano: *">
-                                <input type="text" 
-                                       className="form-control" 
-                                       id="inputAno" 
-                                       value={this.state.ano}
-                                       onChange={e => this.setState({ano: e.target.value})}
-                                       placeholder="Digite o Ano" />
-                            </FormGroup>
-
-                            <FormGroup htmlFor="inputMes" label="Mês: ">
-                                <SelectMenu id="inputMes" 
-                                            value={this.state.mes}
-                                            onChange={e => this.setState({ mes: e.target.value })}
-                                            className="form-control" 
-                                            lista={meses} />
-                            </FormGroup>
-
-                            <FormGroup htmlFor="inputDesc" label="Descrição: ">
-                                <input type="text" 
-                                       className="form-control" 
-                                       id="inputDesc" 
-                                       value={this.state.descricao}
-                                       onChange={e => this.setState({descricao: e.target.value})}
-                                       placeholder="Digite a descrição" />
-                            </FormGroup>
-
-                            <FormGroup htmlFor="inputTipo" label="Tipo Lançamento: ">
-                                <SelectMenu id="inputTipo" 
-                                            value={this.state.tipo}
-                                            onChange={e => this.setState({ tipo: e.target.value })}
-                                            className="form-control" 
-                                            lista={tipos} />
-                            </FormGroup>
-
-                            <button onClick={this.buscar} 
-                                    type="button" 
-                                    className="btn btn-success">
-                                    <i className="pi pi-search"></i> Buscar
-                            </button>
-                            <button onClick={this.preparaFormularioCadastro} 
-                                    type="button" 
-                                    className="btn btn-danger">
-                                    <i className="pi pi-plus"></i> Cadastrar
-                            </button>
-
-                        </div>
-                        
-                    </div>
-                </div>   
-                <br/ >
-                <div className="row">
-                    <div className="col-md-12">
-                        <div className="bs-component">
-                            <LancamentosTable lancamentos={this.state.lancamentos} 
-                                              deleteAction={this.abrirConfirmacao}
-                                              editAction={this.editar}
-                                              alterarStatus={this.alterarStatus} />
-                        </div>
-                    </div>  
-                </div> 
-                <div>
-                    <Dialog header="Confirmação" 
-                            visible={this.state.showConfirmDialog} 
-                            style={{width: '50vw'}}
-                            footer={confirmDialogFooter} 
-                            modal={true} 
-                            onHide={() => this.setState({showConfirmDialog: false})}>
-                        Confirma a exclusão deste Lançamento?
-                    </Dialog>
-                </div>           
-            </Card>
+            <Card title='Release check'>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="bs-component">
+    
+    
+                  <FormGroup htmlFor="inputAno" label="Year: *">
+                    <input type="text"
+                      class="form-control"
+                      id="inputAno"
+                      value={this.state.ano}
+                      onChange={e => this.setState({ ano: e.target.value })}
+                      placeholder="type the year" />
+                  </FormGroup>
+    
+                  <FormGroup htmlFor="inputMes" label="Month: ">
+                    <SelectMenu id="inputMes"
+                      value={this.state.mes}
+                      onChange={e => this.setState({ mes: e.target.value })}
+                      className="form-control"
+                      lista={meses} />
+                  </FormGroup>
+    
+    
+                  <FormGroup htmlFor="inputDescricao" label="Description: ">
+                    <input type="text"
+                      class="form-control"
+                      id="inputDescricao"
+                      value={this.state.descricao}
+                      onChange={e => this.setState({ descricao: e.target.value })}
+                      placeholder="type the description" />
+                  </FormGroup>
+    
+                  <FormGroup htmlFor="inputTipo" label="Release type: ">
+                    <SelectMenu id="inputTipo"
+                      value={this.state.tipo}
+                      onChange={e => this.setState({ tipo: e.target.value })}
+                      className="form-control"
+                      lista={tipos} />
+                  </FormGroup>
+                 
+                  <button onClick={this.buscar}  type="button" className="btn btn-success">
+                  <i className="pi pi-search"></i>Search</button>
+                 
+                  <button onClick={this.CadastrarLancamento}  type="button" className="btn btn-danger">
+                  <i className="pi pi-plus"></i>Registrer</button>
+    
+                </div>
+              </div>
+            </div>
+            <br />
+            <div className="row">
+              <div className="col-md-12">
+                <div className="bs-component">
+                  <LancamentosTable lancamentos={this.state.lancamentos}
+                    deleteAction={this.abrirConfirmacao}
+                    editAction={this.editar}
+                    alterarStatus={this.alterarStatus}
+                  />
+                </div>
+    
+              </div>
+            </div>
+            <div>
+              <Dialog header="Confirmation" visible={this.state.showConfirmDialog} style={{ width: '50vw' }} footer={confirmDialogFooter} modal={true} onHide={() => this.setState({ showConfirmDialog: false })}>
+            
+                Are you sure you want to delete this release?
+            </Dialog>
+    
+            </div>
+    
+    
+          </Card>
 
         )
     }
