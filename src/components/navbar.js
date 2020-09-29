@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Navbaritem from './navbaritem'
+import Navbaritem from './navbarItem'
 // import Login from '../views/Login'
 
 import { AuthConsumer} from '../main/provedorAutenticacao'
