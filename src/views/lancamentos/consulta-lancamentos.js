@@ -160,7 +160,6 @@ class ConsultaLancamentos extends React.Component {
                       className="form-control"
                       lista={tipos} />
                   </FormGroup>
-                 
                   <button onClick={this.buscar}  type="button" className="btn btn-success">
                   <i className="pi pi-search"></i>Search</button>
                  
